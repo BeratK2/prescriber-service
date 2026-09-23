@@ -6,6 +6,9 @@ import jakarta.persistence.Id;
 
 @Entity
 public class Customer {
+	@Id
+	private long customer_id;
+
 	@Column(name="customer_name")
 	private String customer_name;
 	
@@ -25,12 +28,21 @@ public class Customer {
 	public Customer(long customer_id, String customer_name, String customer_address, String customer_phone,
 			String customer_email) {
 		super();
+		this.customer_id = customer_id;
 		this.customer_name = customer_name;
 		this.customer_address = customer_address;
 		this.customer_phone = customer_phone;
 		this.customer_email = customer_email;
 	}
+	
+	public long getCustomer_id() {
+		return customer_id;
+	}
 
+	public void setCustomer_id(long customer_id) {
+		this.customer_id = customer_id;
+	}
+	
 	public String getCustomer_name() {
 		return customer_name;
 	}
@@ -63,10 +75,11 @@ public class Customer {
 		this.customer_email = customer_email;
 	}
 
+	
 	@Override
 	public String toString() {
-		return "Customer [customer_name=" + customer_name + ", customer_address=" + customer_address
-				+ ", customer_phone=" + customer_phone + ", customer_email=" + customer_email + "]";
+		return "Customer [customer_id=" + customer_id + ", customer_name=" + customer_name + ", customer_address="
+				+ customer_address + ", customer_phone=" + customer_phone + ", customer_email=" + customer_email + "]";
 	}
 	
 	

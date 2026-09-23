@@ -1,6 +1,10 @@
 package com.samaritan.prescriber_service;
 
+import java.util.Optional;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -14,9 +18,18 @@ public class PrescriberController {
         this.customerRepository = customerRepository;
     }
 	
-	@GetMapping("/hello")
-	public String hello() {
-		return "hello world";
+	// Get all customers
+	@GetMapping("/customers")
+	public Iterable<Customer> hello() {
+		return customerRepository.findAll();
+	}
+	
+	// Get customer 
+	@GetMapping("/customer/{id}")
+	public ResponseEntity<Customer> customerById(@PathVariable Long id) {
+		Optional<Customer> medication = customerRepository.findById(id);
+		return medication.map(ResponseEntity::ok)
+				.orElseGet(() -> ResponseEntity.notFound().build());
 	}
 	
 	// Create customer
@@ -28,7 +41,6 @@ public class PrescriberController {
 							   @RequestParam("customer_email") String customer_email) {
 		// TODO: Need to give customer a prescribed medication
 		Customer customer = new Customer(0, customer_name, customer_address, customer_phone, customer_email);
-		
         customerRepository.save(customer);
 	}
 }
