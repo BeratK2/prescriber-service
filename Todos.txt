@@ -1,3 +1,10 @@
 09-23
-- Add dummy store data
-- Have POST customer route take in a store ID as a 
+- Add dummy store data 
+- Have POST customer route take in a store ID as a param and add to store_customer
+
+09-24 
+- Add prescribe route.
+
+
+Questions:
+- Should I use req params or req body for a POST request

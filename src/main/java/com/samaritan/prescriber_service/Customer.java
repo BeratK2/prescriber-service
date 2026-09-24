@@ -2,11 +2,14 @@ package com.samaritan.prescriber_service;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
 public class Customer {
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long customer_id;
 
 	@Column(name="customer_name")
@@ -25,7 +28,7 @@ public class Customer {
 		super();
 	}
 	
-	public Customer(long customer_id, String customer_name, String customer_address, String customer_phone,
+	public Customer(String customer_name, String customer_address, String customer_phone,
 			String customer_email) {
 		super();
 		this.customer_id = customer_id;
