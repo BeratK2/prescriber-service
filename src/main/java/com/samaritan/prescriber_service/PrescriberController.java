@@ -3,6 +3,7 @@ package com.samaritan.prescriber_service;
 import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,10 +15,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class PrescriberController {
 	private final CustomerRepository customerRepository;
 	private final StoreRepository storeRepository;
-	
-	public PrescriberController(CustomerRepository customerRepository, StoreRepository storeRepository) {
+	private final MedicationRepository medicationRepository;
+	private final JdbcTemplate jdbcTemplate;
+
+	public PrescriberController(CustomerRepository customerRepository, 
+								StoreRepository storeRepository,
+								MedicationRepository medicationRepository,
+								JdbcTemplate jdbcTemplate) {
 		this.customerRepository = customerRepository;
 		this.storeRepository = storeRepository;
+		this.medicationRepository = medicationRepository;
+	    this.jdbcTemplate = jdbcTemplate;
 	}
 	
 	// Get all customers
@@ -54,8 +62,31 @@ public class PrescriberController {
 		Store store = storeOpt.get();
         store.getCustomers().add(savedCustomer);
 		storeRepository.save(store);
-		
 		return ResponseEntity.ok().build();
 	}
+	
+	// Prescribe medication
+	@PostMapping("/prescribe")
+	public ResponseEntity<?> prescribeMedication(@RequestParam("customer_id") long customer_id,
+	                                              @RequestParam("medication_id") long medication_id) {
+	    Optional<Customer> customerOpt = customerRepository.findById(customer_id);
+	    if (customerOpt.isEmpty()) {
+	        return ResponseEntity.badRequest().body("Customer not found for customer_id: " + customer_id);
+	    }
+
+	    Optional<Medication> medicationOpt = medicationRepository.findById(medication_id);
+	    if (medicationOpt.isEmpty()) {
+	        return ResponseEntity.badRequest().body("Medication not found for medication_id: " + medication_id);
+	    }
+
+	    jdbcTemplate.update(
+	        "INSERT INTO customer_medication (customer_id, medication_id) VALUES (?, ?)",
+	        customer_id, medication_id
+	    );
+
+	    return ResponseEntity.ok().build();
+	}
+	
+			// View prescription details for chosen customer
 }
 

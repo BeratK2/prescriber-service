@@ -5,6 +5,9 @@
 09-24 
 - Add prescribe route.
 
+09-25 
+- Get prescription details
 
 Questions:
 - Should I use req params or req body for a POST request
+- Should I call the medication database directly from here or from the medication service?

@@ -10,3 +10,4 @@ public class PrescriberServiceApplication {
 		SpringApplication.run(PrescriberServiceApplication.class, args);
 	}
 }
+
