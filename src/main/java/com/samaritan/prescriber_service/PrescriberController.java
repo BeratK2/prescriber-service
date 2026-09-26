@@ -1,5 +1,7 @@
 package com.samaritan.prescriber_service;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
@@ -10,6 +12,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.samaritan.prescriber_service.Entities.Customer;
+import com.samaritan.prescriber_service.Entities.Medication;
+import com.samaritan.prescriber_service.Entities.Store;
+import com.samaritan.prescriber_service.Repositories.CustomerRepository;
+import com.samaritan.prescriber_service.Repositories.MedicationRepository;
+import com.samaritan.prescriber_service.Repositories.StoreRepository;
 
 @RestController
 public class PrescriberController {
@@ -87,6 +96,23 @@ public class PrescriberController {
 	    return ResponseEntity.ok().build();
 	}
 	
-			// View prescription details for chosen customer
+	// View prescription details for chosen customer
+	@GetMapping("/prescriptions")
+	public ResponseEntity<?> prescriptions(@RequestParam("customer_id") long customer_id){
+		 Optional<Customer> customerOpt = customerRepository.findById(customer_id);
+		    if (customerOpt.isEmpty()) {
+		        return ResponseEntity.badRequest().body("Customer not found for customer_id: " + customer_id);
+		    }
+		    
+		    List<Map<String, Object>> prescriptions = jdbcTemplate.queryForList(
+		    	    "SELECT m.medication_id, m.medication_name, m.medication_description " +
+		    	            "FROM customer_medication cm " +
+		    	            "JOIN medication.medication m ON cm.medication_id = m.medication_id " +
+		    	            "WHERE cm.customer_id = ?",
+		    	            customer_id
+		    ); 
+		    
+		    return ResponseEntity.ok(prescriptions);
+	}
 }
 

@@ -1,4 +1,4 @@
-package com.samaritan.prescriber_service;
+package com.samaritan.prescriber_service.Entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

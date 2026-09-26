@@ -1,4 +1,4 @@
-package com.samaritan.prescriber_service;
+package com.samaritan.prescriber_service.Entities;
 
 import java.util.HashSet;
 import java.util.Set;

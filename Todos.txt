@@ -8,6 +8,12 @@
 09-25 
 - Get prescription details
 
+09-26
+- Organize files and create pharmacist service
+
+09-27
+- View medication routes for pharmacist and prescriber
+
 Questions:
 - Should I use req params or req body for a POST request
 - Should I call the medication database directly from here or from the medication service?
