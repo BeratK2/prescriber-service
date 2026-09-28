@@ -114,5 +114,19 @@ public class PrescriberController {
 		    
 		    return ResponseEntity.ok(prescriptions);
 	}
+	
+	// View all medications
+	@GetMapping("medications")
+	public Iterable<Medication> medications(){
+		return medicationRepository.findAll();
+	}
+	
+	// Get medication by ID
+	@GetMapping("/medications/{id}")
+	public ResponseEntity<Medication> medicationById(@PathVariable Long id) {
+		Optional<Medication > medication = medicationRepository.findById(id);
+		return medication.map(ResponseEntity::ok)
+				.orElseGet(() -> ResponseEntity.notFound().build());
+	}
 }
 
